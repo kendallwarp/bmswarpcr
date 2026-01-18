@@ -218,7 +218,7 @@ export const Calendar: React.FC = () => {
                                     )}
                                 >
                                     <div className={clsx(
-                                        "flex justify-between items-start mb-2 sticky top-0 z-10 p-1 -mx-1 -mt-1 rounded-sm border-b border-transparent transition-colors",
+                                        "flex justify-between items-start mb-4 pb-1 sticky top-0 z-10 p-1 -mx-1 -mt-1 rounded-sm border-b border-transparent transition-colors",
                                         isToday(day)
                                             ? "bg-blue-50 dark:bg-blue-900/50"
                                             : !isCurrentMonth
