@@ -47,6 +47,9 @@ const translations = {
         'cal.next': 'Next',
         'cal.view_grid': 'Grid View',
         'cal.view_list': 'List View',
+        'cal.view_day': 'Day',
+        'cal.view_week': 'Week',
+        'cal.view_month': 'Month',
 
         // Status
         'status.draft': 'Draft',
@@ -161,6 +164,9 @@ const translations = {
         'cal.next': 'Sig',
         'cal.view_grid': 'Vista Cuadrícula',
         'cal.view_list': 'Vista Lista',
+        'cal.view_day': 'Día',
+        'cal.view_week': 'Semana',
+        'cal.view_month': 'Mes',
 
         // Status
         'status.draft': 'Borrador',

@@ -11,23 +11,113 @@ const TikTokIcon = ({ size = 12 }: { size?: number }) => (
     </svg>
 );
 
-const PlatformConfig: Record<string, { icon: React.ReactNode, bg: string, text: string }> = {
-    'Facebook': { icon: <Facebook size={10} />, bg: 'bg-[#1877F2]', text: 'text-white' },
-    'Instagram': { icon: <Instagram size={10} />, bg: 'bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500', text: 'text-white' },
-    'LinkedIn': { icon: <Linkedin size={10} />, bg: 'bg-[#0077b5]', text: 'text-white' },
-    'Twitter': { icon: <Twitter size={10} />, bg: 'bg-[#1DA1F2]', text: 'text-white' },
-    'WhatsApp': { icon: <MessageCircle size={10} />, bg: 'bg-[#25D366]', text: 'text-white' },
-    'TikTok': { icon: <TikTokIcon size={10} />, bg: 'bg-black', text: 'text-white' },
-    'Google Ads': { icon: <span className="font-bold text-[8px]">G</span>, bg: 'bg-[#4285F4]', text: 'text-white' },
+const PlatformConfig: Record<string, { icon: React.ReactNode, bg: string, text: string, pastelBg: string, pastelText: string, darkPastelBg?: string, darkPastelText?: string }> = {
+    'Facebook': {
+        icon: <Facebook size={10} />,
+        bg: 'bg-[#1877F2]',
+        text: 'text-white',
+        pastelBg: 'bg-[#E7F3FF]',
+        pastelText: 'text-[#1877F2]',
+        darkPastelBg: 'dark:bg-[#1877F2]/20',
+        darkPastelText: 'dark:text-[#6ba6f9]'
+    },
+    'Instagram': {
+        icon: <Instagram size={10} />,
+        bg: 'bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500',
+        text: 'text-white',
+        pastelBg: 'bg-[#FFEFF5]',
+        pastelText: 'text-[#D300C5]',
+        darkPastelBg: 'dark:bg-[#D300C5]/20',
+        darkPastelText: 'dark:text-[#ff80e5]'
+    },
+    'LinkedIn': {
+        icon: <Linkedin size={10} />,
+        bg: 'bg-[#0077b5]',
+        text: 'text-white',
+        pastelBg: 'bg-[#E6F6FF]',
+        pastelText: 'text-[#0077b5]',
+        darkPastelBg: 'dark:bg-[#0077b5]/20',
+        darkPastelText: 'dark:text-[#66c2ff]'
+    },
+    'Twitter': {
+        icon: <Twitter size={10} />,
+        bg: 'bg-[#1DA1F2]',
+        text: 'text-white',
+        pastelBg: 'bg-[#E8F5FE]',
+        pastelText: 'text-[#1DA1F2]',
+        darkPastelBg: 'dark:bg-[#1DA1F2]/20',
+        darkPastelText: 'dark:text-[#71c9f9]'
+    },
+    'WhatsApp': {
+        icon: <MessageCircle size={10} />,
+        bg: 'bg-[#25D366]',
+        text: 'text-white',
+        pastelBg: 'bg-[#E9FBEF]',
+        pastelText: 'text-[#128C7E]',
+        darkPastelBg: 'dark:bg-[#25D366]/20',
+        darkPastelText: 'dark:text-[#4dfba3]'
+    },
+    'TikTok': {
+        icon: <TikTokIcon size={10} />,
+        bg: 'bg-black',
+        text: 'text-white',
+        pastelBg: 'bg-[#F2F2F2]',
+        pastelText: 'text-black',
+        darkPastelBg: 'dark:bg-white/20',
+        darkPastelText: 'dark:text-white'
+    },
+    'Google Ads': {
+        icon: <span className="font-bold text-[8px]">G</span>,
+        bg: 'bg-[#4285F4]',
+        text: 'text-white',
+        pastelBg: 'bg-[#E8F0FE]',
+        pastelText: 'text-[#1967D2]',
+        darkPastelBg: 'dark:bg-[#4285F4]/20',
+        darkPastelText: 'dark:text-[#8ab4f8]'
+    },
 };
 
 interface PostCardProps {
     post: Post;
     onClick: (post: Post) => void;
+    variant?: 'default' | 'minimal';
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post, onClick }) => {
-    const config = PlatformConfig[post.platform] || { icon: <span className="text-[8px]">•</span>, bg: 'bg-gray-500', text: 'text-white' };
+export const PostCard: React.FC<PostCardProps> = ({ post, onClick, variant = 'default' }) => {
+    const config = PlatformConfig[post.platform] || {
+        icon: <span className="text-[8px]">•</span>,
+        bg: 'bg-gray-500',
+        text: 'text-white',
+        pastelBg: 'bg-gray-100',
+        pastelText: 'text-gray-700',
+        darkPastelBg: 'dark:bg-gray-700',
+        darkPastelText: 'dark:text-gray-300'
+    };
+
+    if (variant === 'minimal') {
+        return (
+            <div
+                onClick={() => onClick(post)}
+                className={clsx(
+                    "group relative flex items-center gap-2 px-2 py-1.5 rounded-full border border-transparent hover:border-gray-200 dark:hover:border-gray-600 shadow-sm hover:shadow-md transition-all cursor-pointer",
+                    config.pastelBg,
+                    config.darkPastelBg,
+                    post.status === 'Draft' && "border-dashed opacity-80"
+                )}
+            >
+                {/* Minimal Content */}
+                <div className={clsx("flex items-center gap-1.5 min-w-0 flex-1", config.pastelText, config.darkPastelText)}>
+                    <span className="shrink-0">{config.icon}</span>
+                    <span className="text-[10px] mobile:text-[11px] font-bold truncate shrink-0 max-w-[60px]">
+                        {post.platform}
+                    </span>
+                    <span className="text-[10px] mobile:text-[11px] truncate font-medium opacity-90">
+                        {post.objective || post.copy || "No Content"}
+                    </span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div
