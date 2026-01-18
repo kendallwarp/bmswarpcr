@@ -343,10 +343,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                                 </button>
                                 <button
                                     onClick={() => setIsEditing(true)}
-                                    className="flex-1 py-2.5 text-sm font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200 rounded-lg transition-colors flex items-center justify-center gap-2"
+                                    className="flex-1 py-2.5 text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
                                 >
                                     <Edit2 size={16} />
-                                    {t('btn.edit') || 'Edit Post'}
+                                    {t('btn.edit')}
                                 </button>
                             </>
                         )}

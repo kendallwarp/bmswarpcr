@@ -22,6 +22,7 @@ const translations = {
         'btn.delete': 'Delete',
         'btn.cancel': 'Cancel',
         'btn.save': 'Save',
+        'btn.edit': 'Edit',
         'btn.clear_all': 'Reset Data',
 
         // Export
@@ -135,6 +136,7 @@ const translations = {
         'btn.delete': 'Eliminar',
         'btn.cancel': 'Cancelar',
         'btn.save': 'Guardar',
+        'btn.edit': 'Editar',
         'btn.clear_all': 'Resetear Datos',
 
         // Export
