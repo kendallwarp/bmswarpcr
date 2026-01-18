@@ -202,7 +202,7 @@ export const Calendar: React.FC = () => {
                     </div>
 
                     {/* Grid Days */}
-                    <div className="grid grid-cols-1 md:grid-cols-7 flex-1 auto-rows-fr overflow-y-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-7 flex-1 auto-rows-auto overflow-y-auto">
                         {calendarDays.map((day) => {
                             const dayStr = format(day, 'yyyy-MM-dd');
                             const dayPosts = posts.filter(p => p.date === dayStr);
