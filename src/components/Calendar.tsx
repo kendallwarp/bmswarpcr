@@ -99,7 +99,12 @@ export const Calendar: React.FC = () => {
         let postsToExport = postsRaw.filter(p => p.date >= startDate && p.date <= endDate);
 
         if (brand !== 'All') {
-            postsToExport = postsToExport.filter(p => p.brand === brand);
+            const selectedBrandObj = brands.find(b => b.name === brand);
+            if (selectedBrandObj) {
+                postsToExport = postsToExport.filter(p => p.brandId === selectedBrandObj.id);
+            } else {
+                postsToExport = postsToExport.filter(p => p.brand === brand);
+            }
         }
 
         const title = brand !== 'All' ? t('pdf.report_for', { brand }) : t('pdf.social_plan');
