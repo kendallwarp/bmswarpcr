@@ -1,0 +1,10 @@
+date,time,platform,objective,status,isPaid,budget,copy,imageURL,campaign_name,ad_group_name,ad_id
+1/1/2024,9:00,Instagram,Brand Awareness,Draft,FALSE,0,Sample copy text,https://example.com/image.jpg,,,
+2026-01-20,10:00,Instagram,Awareness,Scheduled,TRUE,500,🌟 Descubre nuestra nueva colección de verano! ☀️ #Summer2026,,Verano 2026,Audiencia 25-34 años,23847656221840001
+2026-01-20,14:30,Facebook,Engagement,Scheduled,TRUE,750,💙 ¡Únete a nuestra comunidad! Comparte tus momentos favoritos con nosotros.,,Verano 2026,Stories Premium,23847656221840002
+2026-01-21,09:00,TikTok,Conversion,Draft,TRUE,1000,🎵 Trend alert! Mira cómo usar nuestro producto de forma creativa #FYP,,Verano 2026,Video Viral 18-24,1789234567890
+2026-01-22,16:00,LinkedIn,Lead Generation,Approved,TRUE,2000,🚀 Impulsa tu negocio con nuestras soluciones B2B. Agenda una demo hoy.,,Campaña B2B Q1,B2B Decision Makers,urn:li:share:1234567890
+2026-01-23,11:30,WhatsApp,Customer Service,Scheduled,FALSE,0,👋 Hola! Tenemos una oferta especial para ti. Responde INTERESADO para más info.,,Retención Clientes,Clientes VIP,
+2026-01-24,13:00,Instagram,Awareness,Draft,FALSE,0,📸 Contenido orgánico: Behind the scenes de nuestro equipo creativo!,,Contenido Orgánico,Seguidores activos,
+2026-01-25,10:00,Google Ads,Conversion,Scheduled,TRUE,1500,Compra ahora con 30% de descuento. Envío gratis en pedidos mayores a $50.,,Promoción Enero,Búsqueda Brand,1234567890
+2026-01-26,15:00,Pinterest,Awareness,Approved,TRUE,600,✨ Inspírate con nuestras ideas de decoración para el hogar #HomeDecor,,Inspiración Hogar,Inspiración Hogar,9876543210
