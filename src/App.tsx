@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Layout } from './components/Layout';
 import { Calendar } from './components/Calendar';
 import { KPIDashboard } from './components/KPIDashboard';
-import { SettingsView } from './components/SettingsView';
 import { Login } from './pages/Login';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -35,9 +34,9 @@ function AppContent() {
       <BrandProvider>
         <PostProvider>
           <ThemeProvider>
-            {/* @ts-ignore - passing props effectively */}
+
             <Layout currentView={view} setView={setView}>
-              {view === 'calendar' ? <Calendar /> : view === 'dashboard' ? <KPIDashboard /> : <SettingsView />}
+              {view === 'calendar' ? <Calendar /> : view === 'dashboard' ? <KPIDashboard /> : <div className="p-10 text-center text-gray-500">Settings Module Coming Soon</div>}
             </Layout>
           </ThemeProvider>
         </PostProvider>

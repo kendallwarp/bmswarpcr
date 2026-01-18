@@ -31,7 +31,7 @@ export const fetchTikTokReports = async (
         report_type: 'BASIC',
         data_level: 'AUCTION_CAMPAIGN',
         dimensions: ['campaign_id', 'stat_time_day'],
-        metrics: ['spend', 'cpc', 'conversion', 'video_views_p75', 'comments', 'likes', 'shares', 'impressions'],
+        metrics: ['spend', 'cpc', 'conversion', 'clicks', 'comments', 'likes', 'shares', 'impressions'],
         start_date: startDate.toISOString().split('T')[0],
         end_date: endDate.toISOString().split('T')[0],
         page_size: 1000
@@ -61,14 +61,13 @@ export const fetchTikTokReports = async (
         let totalClicks = 0;
         let totalConversions = 0;
         let totalEngagements = 0;
-        let totalVideoViews = 0;
 
         data.data.list.forEach(item => {
             const m = item.metrics;
             totalSpend += m.spend || 0;
             totalImpressions += m.impressions || 0;
             totalConversions += m.conversion || 0;
-            totalVideoViews += m.video_views_p75 || 0;
+            totalClicks += m.clicks || 0;
 
             // Calculate total engagements
             totalEngagements += (m.likes || 0) + (m.comments || 0) + (m.shares || 0);

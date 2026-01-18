@@ -217,11 +217,11 @@ export const Calendar: React.FC = () => {
                                         isToday(day) && "bg-blue-50/30 dark:bg-blue-900/10"
                                     )}
                                 >
-                                    <div className="flex justify-between items-start mb-1">
+                                    <div className="flex justify-between items-start mb-1 sticky top-0 z-10 backdrop-blur-sm p-1 -mx-1 -mt-1 rounded-md">
                                         <div className="flex items-center gap-2">
                                             <span className={clsx(
-                                                "text-sm font-medium w-6 h-6 flex items-center justify-center rounded-full",
-                                                isToday(day) ? "bg-blue-600 text-white" : "text-gray-700 dark:text-gray-300"
+                                                "text-sm font-medium w-6 h-6 flex items-center justify-center rounded-full shadow-sm",
+                                                isToday(day) ? "bg-blue-600 text-white" : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                                             )}>
                                                 {format(day, 'd')}
                                             </span>
@@ -231,7 +231,9 @@ export const Calendar: React.FC = () => {
                                             </span>
                                         </div>
                                         {dayPosts.length > 0 && (
-                                            <span className="text-[10px] text-gray-400">{dayPosts.length} posts</span>
+                                            <span className="text-[10px] font-semibold bg-white/50 dark:bg-gray-800/50 px-1.5 py-0.5 rounded-full border border-gray-100 dark:border-gray-700 text-gray-500">
+                                                {dayPosts.length}
+                                            </span>
                                         )}
                                     </div>
 

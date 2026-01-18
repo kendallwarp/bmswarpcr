@@ -121,7 +121,7 @@ export interface TikTokReportResponse {
                 spend: number;
                 cpc: number;
                 conversion: number;
-                video_views_p75: number;
+                clicks: number;
                 comments: number;
                 likes: number;
                 shares: number;
