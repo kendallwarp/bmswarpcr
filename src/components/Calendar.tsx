@@ -245,7 +245,7 @@ export const Calendar: React.FC = () => {
                                     </div>
 
                                     {/* Post List */}
-                                    <div className="space-y-1 pl-2">
+                                    <div className="space-y-1 px-2">
                                         {dayPosts.map((post: Post) => (
                                             <PostCard key={post.id} post={post} onClick={(p) => setSelectedPost(p)} />
                                         ))}
