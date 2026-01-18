@@ -212,7 +212,7 @@ export const Calendar: React.FC = () => {
                                 <div
                                     key={day.toISOString()}
                                     className={clsx(
-                                        "min-h-[100px] md:min-h-[120px] p-2 border-b border-r border-gray-100 dark:border-gray-700 transition-colors",
+                                        "relative flex flex-col h-full min-h-[100px] md:min-h-[120px] p-2 border-b border-r border-gray-100 dark:border-gray-700 transition-colors",
                                         !isCurrentMonth && "bg-gray-50/50 dark:bg-gray-800/50 text-gray-400",
                                         isToday(day) && "bg-blue-50/30 dark:bg-blue-900/10"
                                     )}
