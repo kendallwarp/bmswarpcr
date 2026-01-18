@@ -203,7 +203,7 @@ export const Calendar: React.FC = () => {
 
                     {/* Grid Days */}
                     <div className="grid grid-cols-1 md:grid-cols-7 flex-1 auto-rows-auto overflow-y-auto">
-                        {calendarDays.map((day) => {
+                        {calendarDays.map((day, index) => {
                             const dayStr = format(day, 'yyyy-MM-dd');
                             const dayPosts = posts.filter(p => p.date === dayStr);
                             const isCurrentMonth = isSameMonth(day, monthStart);
@@ -211,8 +211,9 @@ export const Calendar: React.FC = () => {
                             return (
                                 <div
                                     key={day.toISOString()}
+                                    style={{ zIndex: 50 - index }}
                                     className={clsx(
-                                        "relative flex flex-col h-full min-h-[100px] md:min-h-[120px] p-2 border-b border-r border-gray-100 dark:border-gray-700 transition-colors",
+                                        "relative flex flex-col h-auto min-h-[100px] md:min-h-[120px] p-2 border-b border-r border-gray-100 dark:border-gray-700 transition-colors",
                                         !isCurrentMonth && "bg-gray-50/50 dark:bg-gray-800/50 text-gray-400",
                                         isToday(day) && "bg-blue-50/30 dark:bg-blue-900/10"
                                     )}
