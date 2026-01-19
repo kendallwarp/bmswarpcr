@@ -37,6 +37,8 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
     const [errors, setErrors] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [encoding, setEncoding] = useState<'UTF-8' | 'ISO-8859-1'>('ISO-8859-1');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const downloadTemplate = () => {
         const headers = ['date', 'time', 'platform', 'objective', 'status', 'isPaid', 'budget', 'copy', 'imageURL', 'imageDescription', 'campaign_name', 'ad_group_name', 'ad_id'];
@@ -56,10 +58,14 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
         document.body.removeChild(link);
     };
 
-    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement> | File) => {
+        const file = e instanceof File ? e : e.target.files?.[0];
         if (!file) return;
+        setSelectedFile(file);
+        parseFile(file, encoding);
+    };
 
+    const parseFile = (file: File, enc: string) => {
         setLoading(true);
         setErrors([]);
         setData([]);
@@ -67,7 +73,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
         Papa.parse<CSVRow>(file, {
             header: true,
             skipEmptyLines: true,
-            encoding: 'ISO-8859-1', // Fix for Excel Windows CSV encoding (Spanish characters / Emojis)
+            encoding: enc, // Dynamic encoding
             complete: (results) => {
                 const parsedPosts: Partial<Post>[] = [];
                 const newErrors: string[] = [];
@@ -151,9 +157,10 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
             await bulkAddPosts(data as Omit<Post, 'id' | 'createdAt'>[]);
             alert(t('import.success_message', { count: data.length }));
             onClose();
-        } catch (err) {
-            console.error(err);
-            alert(t('import.error_saving'));
+        } catch (err: any) {
+            console.error('Import Error Details:', err);
+            const errorMessage = err.message || JSON.stringify(err);
+            alert(`${t('import.error_saving')}\n\nDetalles del error: ${errorMessage}`);
         } finally {
             setSaving(false);
         }
@@ -226,6 +233,34 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                         </div>
                     ) : (
                         <div className="flex-1 flex flex-col overflow-hidden">
+                            {/* Encoding Selector */}
+                            <div className="mb-4 flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg">
+                                <div className="text-sm text-blue-700 dark:text-blue-300">
+                                    <span className="font-bold">¿Los caracteres se ven bien?</span> Si ves símbolos extraños, cambia la codificación:
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            const newEnc = 'UTF-8';
+                                            setEncoding(newEnc);
+                                            if (selectedFile) parseFile(selectedFile, newEnc);
+                                        }}
+                                        className={`px-3 py-1 text-xs font-bold rounded ${encoding === 'UTF-8' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 border border-gray-200 dark:border-gray-700'}`}
+                                    >
+                                        UTF-8
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            const newEnc = 'ISO-8859-1';
+                                            setEncoding(newEnc);
+                                            if (selectedFile) parseFile(selectedFile, newEnc);
+                                        }}
+                                        className={`px-3 py-1 text-xs font-bold rounded ${encoding === 'ISO-8859-1' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 border border-gray-200 dark:border-gray-700'}`}
+                                    >
+                                        Excel (Windows)
+                                    </button>
+                                </div>
+                            </div>
                             {errors.length > 0 && (
                                 <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg overflow-y-auto max-h-32">
                                     <h3 className="font-bold text-red-700 dark:text-red-400 flex items-center gap-2 mb-2">
