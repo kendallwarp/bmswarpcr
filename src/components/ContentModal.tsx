@@ -29,7 +29,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
         copy: '',
         date: new Date().toISOString().split('T')[0],
         time: '10:00',
-        image: ''
+        image: '',
+        image_description: ''
     });
     const [preview, setPreview] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -135,6 +136,13 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                                 />
                                 <ImageIcon size={16} className="text-gray-400" />
                             </div>
+                            <label className="text-xs font-bold text-gray-500 mt-2 mb-1 block">{t('form.image_description')}</label>
+                            <textarea
+                                value={formData.image_description || ''}
+                                onChange={(e) => handleChange('image_description', e.target.value)}
+                                className="w-full text-sm bg-transparent border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:border-blue-500 outline-none resize-none h-16"
+                                placeholder="..."
+                            />
                         </div>
                     )}
 
@@ -235,6 +243,16 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                                     >
                                         {brands.map(b => <option key={b.id} value={b.name}>{b.name}</option>)}
                                     </select>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Image Description (View Mode) */}
+                        {!isEditing && formData.image_description && (
+                            <div>
+                                <h3 className="text-sm font-semibold uppercase text-gray-400 tracking-wider mb-2">{t('form.image_description')}</h3>
+                                <div className="p-3 bg-blue-50/50 dark:bg-blue-900/10 rounded-lg text-sm italic text-gray-600 dark:text-gray-400 border border-blue-100 dark:border-blue-900/30">
+                                    {formData.image_description}
                                 </div>
                             </div>
                         )}

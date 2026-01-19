@@ -93,6 +93,7 @@ const translations = {
         'form.status': 'Status',
         'form.copy': 'Copy / Caption',
         'form.image': 'Image',
+        'form.image_description': 'Image Description',
         'form.paid': 'Paid Promotion',
         'form.budget': 'Budget',
         'form.drag_drop': 'Drag & Drop or Click to Upload',
@@ -100,7 +101,7 @@ const translations = {
         // Import
         'import.title': 'Import Content',
         'import.drag': 'Drop CSV file here or click to upload',
-        'import.columns': 'Columns: date, time, platform, objective, status, isPaid, copy, imageURL, brand',
+        'import.columns': 'Columns: date, time, platform, objective, status, isPaid, copy, imageURL, imageDescription, brand',
         'import.download_template': 'Download Example Template',
         'import.back': 'Back',
         'import.import_btn': 'Import',
@@ -210,6 +211,7 @@ const translations = {
         'form.status': 'Estado',
         'form.copy': 'Copy / Descripción',
         'form.image': 'Imagen',
+        'form.image_description': 'Descripción de Imagen',
         'form.paid': 'Promoción Pagada',
         'form.budget': 'Presupuesto',
         'form.drag_drop': 'Arrastra o Clic para Subir',
@@ -217,7 +219,7 @@ const translations = {
         // Import
         'import.title': 'Importar Contenido',
         'import.drag': 'Arrastra el archivo CSV aquí o clic para subir',
-        'import.columns': 'Columnas: date, time, platform, objective, status, isPaid, copy, imageURL, brand',
+        'import.columns': 'Columnas: date, time, platform, objective, status, isPaid, copy, imageURL, imageDescription, brand',
         'import.download_template': 'Descargar Plantilla Ejemplo',
         'import.back': 'Atrás',
         'import.import_btn': 'Importar',

@@ -14,6 +14,7 @@ export interface Post {
     budget: number; // Currency value
     copy: string;
     image?: string; // Base64 string or URL
+    image_description?: string; // Text description of the image/design
     brand?: string; // Brand name (optional for backward compatibility)
     createdAt?: number | string; // Timestamp (number) or ISO string
     brandId?: string; // Link to Brand ID - Made optional to support types, but required for Supabase

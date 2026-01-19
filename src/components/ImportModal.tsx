@@ -20,6 +20,7 @@ interface CSVRow {
     budget: string;
     copy: string;
     imageURL: string;
+    imageDescription?: string;
     campaign_name?: string;
     ad_group_name?: string;
     ad_id?: string;
@@ -38,8 +39,8 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
     const [saving, setSaving] = useState(false);
 
     const downloadTemplate = () => {
-        const headers = ['date', 'time', 'platform', 'objective', 'status', 'isPaid', 'budget', 'copy', 'imageURL', 'campaign_name', 'ad_group_name', 'ad_id'];
-        const sampleRow = ['2024-01-01', '09:00', 'Instagram', 'Brand Awareness', 'Draft', 'FALSE', '0', 'Sample copy here', 'https://example.com/image.jpg', '', '', ''];
+        const headers = ['date', 'time', 'platform', 'objective', 'status', 'isPaid', 'budget', 'copy', 'imageURL', 'imageDescription', 'campaign_name', 'ad_group_name', 'ad_id'];
+        const sampleRow = ['2024-01-01', '09:00', 'Instagram', 'Brand Awareness', 'Draft', 'FALSE', '0', 'Sample copy here', 'https://example.com/image.jpg', 'Modern design with blue tones', '', '', ''];
 
         // Create CSV content
         const csvContent = [headers.join(','), sampleRow.join(',')].join('\n');
@@ -123,6 +124,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                         budget,
                         copy: row.copy,
                         image: row.imageURL || undefined,
+                        image_description: row.imageDescription || undefined,
                         brand: currentBrand?.name || 'Unassigned',
                         brandId: currentBrand?.id,
                         campaign_name: row.campaign_name?.trim() || undefined,
@@ -250,6 +252,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                                             <th className="p-3">{t('form.date')}</th>
                                             <th className="p-3">{t('form.platform')}</th>
                                             <th className="p-3">{t('form.image')}</th>
+                                            <th className="p-3">{t('form.image_description')}</th>
                                             <th className="p-3">{t('form.copy')}</th>
                                             <th className="p-3">{t('form.status')}</th>
                                         </tr>
@@ -267,6 +270,9 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                                                     {post.image ? (
                                                         <img src={getImageUrl(post.image)} alt="Preview" className="w-8 h-8 rounded object-cover" />
                                                     ) : <span className="text-gray-400">-</span>}
+                                                </td>
+                                                <td className="p-3 max-w-xs truncate text-gray-600 dark:text-gray-400">
+                                                    {post.image_description || <span className="text-gray-400">-</span>}
                                                 </td>
                                                 <td className="p-3 max-w-xs truncate text-gray-600 dark:text-gray-400">
                                                     {post.copy}

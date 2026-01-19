@@ -57,6 +57,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 budget: p.budget,
                 copy: p.copy,
                 image: p.image,
+                image_description: p.image_description,
                 brandId: p.brand_id,
                 createdAt: p.created_at,
                 // Optional strategy fields
@@ -97,6 +98,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 status: postData.status,
                 copy: postData.copy,
                 image: postData.image,
+                image_description: postData.image_description,
                 is_paid: postData.isPaid,
                 budget: postData.budget,
                 // Strategy fields
@@ -125,6 +127,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 budget: data.budget,
                 copy: data.copy,
                 image: data.image,
+                image_description: data.image_description,
                 brandId: data.brand_id,
                 createdAt: data.created_at,
                 campaign_name: data.campaign_name,
@@ -156,6 +159,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 status: p.status,
                 copy: p.copy,
                 image: p.image,
+                image_description: p.image_description,
                 is_paid: p.isPaid,
                 budget: p.budget,
                 campaign_name: p.campaign_name,
@@ -182,6 +186,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 budget: p.budget,
                 copy: p.copy,
                 image: p.image,
+                image_description: p.image_description,
                 brandId: p.brand_id,
                 createdAt: p.created_at,
                 campaign_name: p.campaign_name,
@@ -209,6 +214,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (updates.budget !== undefined) dbUpdates.budget = updates.budget;
             if (updates.copy !== undefined) dbUpdates.copy = updates.copy;
             if (updates.image !== undefined) dbUpdates.image = updates.image;
+            if (updates.image_description !== undefined) dbUpdates.image_description = updates.image_description;
             if (updates.campaign_name !== undefined) dbUpdates.campaign_name = updates.campaign_name;
             if (updates.ad_group_name !== undefined) dbUpdates.ad_group_name = updates.ad_group_name;
             if (updates.ad_id !== undefined) dbUpdates.ad_id = updates.ad_id;
