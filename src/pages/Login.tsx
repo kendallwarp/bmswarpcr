@@ -38,7 +38,7 @@ export const Login: React.FC = () => {
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="text-center mb-8">
-                    <img src="/logo.svg" alt="Warp CR Logo" className="w-20 h-20 mx-auto mb-4 rounded-2xl shadow-lg" />
+                    <img src="/logo.svg" alt="Warp CR Logo" className="w-20 h-20 mx-auto mb-4" />
                     <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
                         Warp CR
                     </h1>
