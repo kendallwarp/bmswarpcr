@@ -104,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen =
                 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
             `}
         >
-            <div className="px-6 pt-8 pb-4 border-b border-gray-100 dark:border-gray-700">
+            <div className="px-6 pt-8 pb-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <img src="/logo.svg" alt="Warp CR Logo" className="w-10 h-10 object-contain" />
