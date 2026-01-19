@@ -5,6 +5,7 @@ import { PLATFORMS } from '../types';
 import { X, CheckCircle, DollarSign, Calendar as CalendarIcon, Copy, Edit2, Save, Trash2, Image as ImageIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePosts } from '../context/PostContext';
 import { getImageUrl } from '../utils/imageHelper';
+import { compressImage } from '../utils/compressor';
 import { useLanguage } from '../context/LanguageContext';
 import { useBrand } from '../context/BrandContext'; // To select brand if needed
 
@@ -119,6 +120,28 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
+            {/* Navigation Buttons (Outside Modal) */}
+            {!isEditing && sortedPosts.length > 1 && (
+                <>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex - 1); }}
+                        disabled={!hasPrev}
+                        className={`fixed left-4 top-1/2 -translate-y-1/2 z-[60] p-4 rounded-full bg-white dark:bg-gray-800 shadow-2xl border border-gray-200 dark:border-gray-700 transition-all ${!hasPrev ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
+                        aria-label="Previous Post"
+                    >
+                        <ChevronLeft className="w-8 h-8" />
+                    </button>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex + 1); }}
+                        disabled={!hasNext}
+                        className={`fixed right-4 top-1/2 -translate-y-1/2 z-[60] p-4 rounded-full bg-white dark:bg-gray-800 shadow-2xl border border-gray-200 dark:border-gray-700 transition-all ${!hasNext ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
+                        aria-label="Next Post"
+                    >
+                        <ChevronRight className="w-8 h-8" />
+                    </button>
+                </>
+            )}
+
             <div
                 className="bg-white dark:bg-gray-900 w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col md:flex-row border border-gray-200 dark:border-gray-800"
                 onClick={e => e.stopPropagation()}
@@ -139,31 +162,35 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                         </div>
                     )}
 
-                    {/* Image URL Edit Input (Overlay only in edit mode) */}
-                    {isEditing && (
-                        <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-gray-800/90 p-2 rounded-lg shadow-lg backdrop-blur">
-                            <label className="text-xs font-bold text-gray-500 mb-1 block">Image URL</label>
-                            <div className="flex gap-2">
-                                <input
-                                    type="text"
-                                    value={formData.image || ''}
-                                    onChange={(e) => {
-                                        handleChange('image', e.target.value);
-                                        setPreview(e.target.value); // Optimistic preview
-                                    }}
-                                    className="flex-1 text-sm bg-transparent border-b border-gray-300 dark:border-gray-600 focus:border-blue-500 outline-none px-1"
-                                    placeholder="https://..."
-                                />
-                                <ImageIcon size={16} className="text-gray-400" />
-                            </div>
-                            <label className="text-xs font-bold text-gray-500 mt-2 mb-1 block">{t('form.image_description')}</label>
-                            <textarea
-                                value={formData.image_description || ''}
-                                onChange={(e) => handleChange('image_description', e.target.value)}
-                                className="w-full text-sm bg-transparent border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:border-blue-500 outline-none resize-none h-16"
-                                placeholder="..."
-                            />
+                    {/* Image Description (View Mode) */}
+                    {!isEditing && formData.image_description && (
+                        <div className="absolute bottom-4 left-4 right-4 bg-black/70 backdrop-blur-sm text-white text-xs p-3 rounded-lg">
+                            <p className="line-clamp-3">{formData.image_description}</p>
                         </div>
+                    )}
+
+                    {/* Upload Button (Edit Mode) */}
+                    {isEditing && (
+                        <label className="absolute bottom-4 right-4 p-2 bg-blue-600 text-white rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition-colors">
+                            <ImageIcon className="w-5 h-5" />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                    if (e.target.files && e.target.files[0]) {
+                                        try {
+                                            const compressed = await compressImage(e.target.files[0]);
+                                            setPreview(compressed);
+                                            handleChange('image', compressed);
+                                        } catch (err) {
+                                            console.error('Compression failed', err);
+                                            alert(t('alert.image_failed'));
+                                        }
+                                    }
+                                }}
+                            />
+                        </label>
                     )}
 
                     {/* Status Badge */}
@@ -174,28 +201,6 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                                     'text-gray-500'
                             } `}>
                             {formData.status}
-                        </div>
-                    )}
-
-                    {/* Navigation Buttons (Floating) */}
-                    {!isEditing && sortedPosts.length > 1 && (
-                        <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none z-20">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex - 1); }}
-                                disabled={!hasPrev}
-                                className={`p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 pointer-events-auto transition-all ${!hasPrev ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
-                                aria-label="Previous Post"
-                            >
-                                <ChevronLeft className="w-8 h-8" />
-                            </button>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex + 1); }}
-                                disabled={!hasNext}
-                                className={`p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 pointer-events-auto transition-all ${!hasNext ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
-                                aria-label="Next Post"
-                            >
-                                <ChevronRight className="w-8 h-8" />
-                            </button>
                         </div>
                     )}
                 </div>
