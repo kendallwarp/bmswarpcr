@@ -318,9 +318,6 @@ export const Calendar: React.FC = () => {
             {showExportModal && (
                 <ExportModal
                     onClose={() => setShowExportModal(false)}
-                    onExport={handleExportReport}
-                    initialDate={currentDate}
-                    availableBrands={availableBrands}
                 />
             )}
         </div>
