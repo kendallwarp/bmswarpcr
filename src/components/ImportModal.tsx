@@ -86,16 +86,40 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                     const platformValue = row.platform?.trim();
                     const copyValue = row.copy?.trim() || '';
 
-                    // Normalize Date (Handle dd/mm/yyyy, mm/dd/yyyy, yyyy-mm-dd)
+                    // Smart Normalize Date (detects DD/MM/YYYY vs MM/DD/YYYY)
                     let normalizedDate = dateValue;
                     if (dateValue.includes('/')) {
                         const parts = dateValue.split('/');
                         if (parts.length === 3) {
+                            let day, month, year;
                             if (parts[0].length === 4) {
-                                normalizedDate = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+                                // yyyy/mm/dd
+                                year = parts[0];
+                                month = parts[1];
+                                day = parts[2];
                             } else {
-                                normalizedDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                                // dd/mm/yyyy or mm/dd/yyyy
+                                const p0 = parseInt(parts[0]);
+                                const p1 = parseInt(parts[1]);
+
+                                if (p0 > 12) {
+                                    // p0 must be day
+                                    day = parts[0];
+                                    month = parts[1];
+                                    year = parts[2];
+                                } else if (p1 > 12) {
+                                    // p1 must be day
+                                    month = parts[0];
+                                    day = parts[1];
+                                    year = parts[2];
+                                } else {
+                                    // Ambiguous, default to DD/MM/YYYY for Spanish locale
+                                    day = parts[0];
+                                    month = parts[1];
+                                    year = parts[2];
+                                }
                             }
+                            normalizedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
                         }
                     }
 
@@ -237,7 +261,10 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                             {/* Encoding Selector */}
                             <div className="mb-4 flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg">
                                 <div className="text-sm text-blue-700 dark:text-blue-300">
-                                    <span className="font-bold">¿Los caracteres se ven bien?</span> Si ves símbolos extraños, cambia la codificación:
+                                    <span className="font-bold">¿Los caracteres se ven bien?</span> Si ves símbolos extraños, cambia la codificación.
+                                    <div className="text-[10px] mt-1 opacity-80">
+                                        💡 Tip: Para emojis, asegúrate de exportar tu Excel como "CSV UTF-8 (delimitado por comas)".
+                                    </div>
                                 </div>
                                 <div className="flex gap-2">
                                     <button
