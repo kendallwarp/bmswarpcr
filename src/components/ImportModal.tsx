@@ -78,7 +78,8 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                 const parsedPosts: Partial<Post>[] = [];
                 const newErrors: string[] = [];
 
-                results.data.forEach((row, index) => {
+                results.data.forEach((row) => {
+                    // v1.0.1 - Added encoding selector and detailed error reporting
                     // Logic: If the row is totally empty or missing critical identifiers, we might skip, 
                     // but we will be very relaxed as requested.
                     const dateValue = (row.date || new Date().toISOString().split('T')[0]).trim();
