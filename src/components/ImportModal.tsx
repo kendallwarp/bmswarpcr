@@ -67,50 +67,42 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
         Papa.parse<CSVRow>(file, {
             header: true,
             skipEmptyLines: true,
+            encoding: 'ISO-8859-1', // Fix for Excel Windows CSV encoding (Spanish characters / Emojis)
             complete: (results) => {
                 const parsedPosts: Partial<Post>[] = [];
                 const newErrors: string[] = [];
 
                 results.data.forEach((row, index) => {
-                    // Basic Validation
-                    if (!row.date || !row.platform || !row.copy) {
-                        newErrors.push(`Row ${index + 1}: Missing required fields(date, platform, copy)`);
-                        return;
-                    }
-
-                    // Normalize Data
-                    const isPaid = row.isPaid?.toLowerCase() === 'true' || row.isPaid?.toLowerCase() === 'yes';
-                    const budget = isPaid ? parseFloat(row.budget?.replace(/[^0-9.]/g, '') || '0') : 0;
+                    // Logic: If the row is totally empty or missing critical identifiers, we might skip, 
+                    // but we will be very relaxed as requested.
+                    const dateValue = (row.date || new Date().toISOString().split('T')[0]).trim();
+                    const platformValue = row.platform?.trim();
+                    const copyValue = row.copy?.trim() || '';
 
                     // Normalize Date (Handle dd/mm/yyyy, mm/dd/yyyy, yyyy-mm-dd)
-                    let normalizedDate = row.date;
-                    if (row.date.includes('/')) {
-                        const parts = row.date.split('/');
-                        // Assume dd/mm/yyyy if first part > 12, else try to be smart or default to yyyy-mm-dd
+                    let normalizedDate = dateValue;
+                    if (dateValue.includes('/')) {
+                        const parts = dateValue.split('/');
                         if (parts.length === 3) {
                             if (parts[0].length === 4) {
-                                // yyyy/mm/dd
                                 normalizedDate = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
                             } else {
-                                // dd/mm/yyyy (Europe/LatAm) vs mm/dd/yyyy (US)
-                                // Standardize on dd/mm/yyyy for international usage or matching user locale preference?
-                                // Given "Cronograma" is Spanish, unlikely to be US format. Assume dd/mm/yyyy.
                                 normalizedDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
                             }
                         }
                     }
 
-                    // Normalize Platform (Fuzzy match against known platforms)
-                    const normalizePlatform = (p: string) => {
+                    // Normalize Platform
+                    const normalizePlatform = (p: string | undefined): Platform => {
                         if (!p) return 'Instagram';
                         const match = PLATFORMS.find((known: string) => known.toLowerCase() === p.toLowerCase());
-                        return match || 'Instagram'; // Default to Instagram if unknown
+                        return match || 'Instagram';
                     };
 
                     parsedPosts.push({
                         date: normalizedDate,
                         time: row.time || '09:00',
-                        platform: normalizePlatform(row.platform) as Platform,
+                        platform: normalizePlatform(platformValue),
                         objective: row.objective || 'General',
                         status: (() => {
                             const s = (row.status || 'Draft').trim();
@@ -118,11 +110,11 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                             if (/^published$/i.test(s)) return 'Published';
                             if (/^scheduled$/i.test(s)) return 'Scheduled';
                             if (/^approved$/i.test(s)) return 'Approved';
-                            return 'Draft'; // Default fallback
+                            return 'Draft';
                         })(),
-                        isPaid,
-                        budget,
-                        copy: row.copy,
+                        isPaid: row.isPaid?.toLowerCase() === 'true' || row.isPaid?.toLowerCase() === 'yes',
+                        budget: parseFloat(row.budget?.replace(/[^0-9.]/g, '') || '0') || 0,
+                        copy: copyValue,
                         image: row.imageURL || undefined,
                         image_description: row.imageDescription || undefined,
                         brand: currentBrand?.name || 'Unassigned',
@@ -135,7 +127,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                 });
 
                 if (results.errors.length > 0) {
-                    results.errors.forEach(err => newErrors.push(`CSV Error: ${err.message} `));
+                    results.errors.forEach(err => newErrors.push(`CSV Error: ${err.message}`));
                 }
 
                 setData(parsedPosts);
