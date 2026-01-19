@@ -108,34 +108,6 @@ export const Calendar: React.FC = () => {
 
     const [showExportModal, setShowExportModal] = useState(false);
 
-    const handleExportReport = async (startDate: string, endDate: string, brand: string) => {
-        // Filter independent of view mode, based on selected range and brand
-        let postsToExport = postsRaw.filter(p => p.date >= startDate && p.date <= endDate);
-
-        if (brand !== 'All') {
-            const selectedBrandObj = brands.find(b => b.name === brand);
-            if (selectedBrandObj) {
-                postsToExport = postsToExport.filter(p => p.brandId === selectedBrandObj.id);
-            } else {
-                postsToExport = postsToExport.filter(p => p.brand === brand);
-            }
-        }
-
-        const title = brand !== 'All' ? t('pdf.report_for', { brand }) : t('pdf.social_plan');
-
-        const translationMap: Record<string, string> = {
-            'pdf.generated': t('pdf.generated'),
-            'pdf.content_details': t('pdf.content_details'),
-            'pdf.no_preview': t('pdf.no_preview'),
-            'pdf.organic': t('pdf.organic'),
-            'pdf.paid': t('pdf.paid'),
-            'pdf.objective': t('form.objective'),
-            'pdf.copy': t('form.copy'),
-        };
-
-        await generatePDFRequest(postsToExport, startDate, endDate, title, translationMap, language);
-    };
-
     return (
         <div className="h-full flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
             <FilterBar
