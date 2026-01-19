@@ -3,7 +3,6 @@ import { usePosts } from '../context/PostContext';
 import type { Post } from '../types';
 import { PostCard } from './PostCard';
 import { ContentModal } from './ContentModal';
-import { generatePDFRequest } from '../utils/pdfGenerator';
 import { ListView } from './ListView';
 import { Download, LayoutGrid, List } from 'lucide-react';
 import clsx from 'clsx';
