@@ -1,8 +1,11 @@
 {
-  "name": "cronograma-app",
+  "name": "warp-cr",
+  "description": "Modern social media content calendar and planning application for marketing teams",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "author": "Warp CR Team",
+  "homepage": "https://warpcr.com",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

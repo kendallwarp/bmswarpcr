@@ -37,7 +37,6 @@ export const BrandProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             const { data, error } = await supabase
                 .from('brands')
                 .select('*')
-                .eq('created_by', user.id)
                 .order('name');
 
             if (error) throw error;
