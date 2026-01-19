@@ -18,27 +18,6 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
     const { posts, updatePost, deletePost } = usePosts();
     const { brands } = useBrand(); // Available brands
 
-    // Sort posts chronologically for navigation
-    const sortedPosts = [...posts].sort((a, b) => {
-        const dateTimeA = `${a.date}T${a.time}`;
-        const dateTimeB = `${b.date}T${b.time}`;
-        return dateTimeA.localeCompare(dateTimeB);
-    });
-
-    const currentIndex = sortedPosts.findIndex(p => String(p.id) === String(formData.id));
-    const hasPrev = currentIndex > 0;
-    const hasNext = currentIndex !== -1 && currentIndex < sortedPosts.length - 1;
-
-    const navigateTo = (index: number) => {
-        if (index >= 0 && index < sortedPosts.length) {
-            const newPost = sortedPosts[index];
-            setFormData(newPost);
-            setPreview(newPost.image ? (getImageUrl(newPost.image) || null) : null);
-            setIsEditing(false);
-            // Update URL or state if needed, but for now local state is enough
-        }
-    };
-
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState<Partial<Post>>({
         platform: 'Instagram',
@@ -62,6 +41,26 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
             setPreview(post.image ? (getImageUrl(post.image) || null) : null);
         }
     }, [post]);
+
+    // Sort posts chronologically for navigation
+    const sortedPosts = [...posts].sort((a, b) => {
+        const dateTimeA = `${a.date}T${a.time}`;
+        const dateTimeB = `${b.date}T${b.time}`;
+        return dateTimeA.localeCompare(dateTimeB);
+    });
+
+    const currentIndex = sortedPosts.findIndex(p => String(p.id) === String(formData.id));
+    const hasPrev = currentIndex > 0;
+    const hasNext = currentIndex !== -1 && currentIndex < sortedPosts.length - 1;
+
+    const navigateTo = (index: number) => {
+        if (index >= 0 && index < sortedPosts.length) {
+            const newPost = sortedPosts[index];
+            setFormData(newPost);
+            setPreview(newPost.image ? (getImageUrl(newPost.image) || null) : null);
+            setIsEditing(false);
+        }
+    };
 
     // Handle form changes
     const handleChange = (field: keyof Post, value: any) => {
