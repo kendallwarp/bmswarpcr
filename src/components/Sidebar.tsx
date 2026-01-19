@@ -107,9 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen =
             <div className="p-6 pb-2 border-b border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="bg-gradient-to-tr from-blue-600 to-purple-600 p-2 rounded-xl shadow-lg">
-                            <CalendarIcon className="text-white w-6 h-6" />
-                        </div>
+                        <img src="/logo.svg" alt="Warp CR Logo" className="w-10 h-10 object-contain" />
                         <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-300">
                             Warp CR
                         </h1>
