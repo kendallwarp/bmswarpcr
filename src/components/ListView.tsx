@@ -3,7 +3,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { usePosts } from '../context/PostContext';
 import { type Post, type PostStatus } from '../types';
 import { getImageUrl } from '../utils/imageHelper';
-import { Trash2, Square, CheckSquare, Edit3, Image as ImageIcon } from 'lucide-react';
+import { Trash2, Square, CheckSquare, Edit3, Image as ImageIcon, FileDown } from 'lucide-react';
+import { ExportModal } from './ExportModal';
 import { format } from 'date-fns';
 import clsx from 'clsx';
 
@@ -17,6 +18,7 @@ export const ListView: React.FC<ListViewProps> = ({ posts, onSelectPost }) => {
     const { bulkDeletePosts, bulkUpdatePostStatus } = usePosts();
     const [selectedIds, setSelectedIds] = useState<Set<string | number>>(new Set());
     const [isBulkProcessing, setIsBulkProcessing] = useState(false);
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
     // Toggle single selection
     const toggleSelect = (id: string | number) => {
@@ -104,6 +106,17 @@ export const ListView: React.FC<ListViewProps> = ({ posts, onSelectPost }) => {
                     </div>
                 </div>
             )}
+
+            {/* Quick Actions Header */}
+            <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50/30 dark:bg-gray-800/30">
+                <span className="text-sm text-gray-500 font-medium">{posts.length} {t('nav.posts')}</span>
+                <button
+                    onClick={() => setIsExportModalOpen(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all border border-blue-100 dark:border-blue-800"
+                >
+                    <FileDown size={14} /> {t('import.export_for_edit')}
+                </button>
+            </div>
 
             {/* Table Header */}
             <div className="flex-1 overflow-auto bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -195,6 +208,9 @@ export const ListView: React.FC<ListViewProps> = ({ posts, onSelectPost }) => {
                     </tbody>
                 </table>
             </div>
+            {isExportModalOpen && (
+                <ExportModal onClose={() => setIsExportModalOpen(false)} />
+            )}
         </div>
     );
 };
