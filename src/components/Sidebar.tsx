@@ -16,9 +16,10 @@ interface SidebarProps {
     isOpen?: boolean;
     onClose?: () => void;
     onShowImport: () => void;
+    onShowExport: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen = false, onClose, onShowImport }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen = false, onClose, onShowImport, onShowExport }) => {
     const { currentBrand } = useBrand();
     const { addPost } = usePosts();
     const { t } = useLanguage();
@@ -165,13 +166,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen =
                                 {t('sidebar.new_post')}
                             </h2>
                         </div>
-                        {/* Import Trigger */}
-                        <button
-                            onClick={onShowImport}
-                            className="w-full mb-6 py-2 border border-dashed border-gray-300 dark:border-gray-700 text-gray-500 hover:border-blue-500 hover:text-blue-500 rounded-lg flex items-center justify-center gap-2 text-sm transition-all"
-                        >
-                            <Upload className="w-4 h-4" /> {t('sidebar.import_csv')}
-                        </button>
+                        {/* Import/Export Actions */}
+                        <div className="grid grid-cols-2 gap-2 mb-6">
+                            <button
+                                onClick={onShowImport}
+                                className="py-2 border border-dashed border-gray-300 dark:border-gray-700 text-gray-500 hover:border-blue-500 hover:text-blue-500 rounded-lg flex items-center justify-center gap-2 text-xs transition-all"
+                            >
+                                <Upload className="w-4 h-4" /> {t('sidebar.import_csv')}
+                            </button>
+                            <button
+                                onClick={onShowExport}
+                                className="py-2 border border-dashed border-gray-300 dark:border-gray-700 text-gray-500 hover:border-blue-500 hover:text-blue-500 rounded-lg flex items-center justify-center gap-2 text-xs transition-all"
+                            >
+                                <Download className="w-4 h-4" /> {t('import.export_for_edit')}
+                            </button>
+                        </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {/* Date & Time */}

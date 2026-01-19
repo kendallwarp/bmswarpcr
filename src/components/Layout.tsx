@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { UserMenu } from './UserMenu';
 import { Moon, Sun, Globe, Menu } from 'lucide-react';
 import { ImportModal } from './ImportModal';
+import { ExportModal } from './ExportModal';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -14,9 +16,10 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children, currentView, setView }) => {
     const { theme, toggleTheme } = useTheme();
-    const { language, setLanguage } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
     const [isSidebarOpen, setSidebarOpen] = useState(false);
-    const [showImport, setShowImport] = useState(false);
+    const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
     const toggleLanguage = () => {
         setLanguage(language === 'en' ? 'es' : 'en');
@@ -33,18 +36,21 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentView, setView }
             )}
 
             {/* Sidebar with mobile props */}
-            {/* @ts-ignore */}
             <Sidebar
                 currentView={currentView}
                 setView={(view) => {
                     setView(view);
-                    setSidebarOpen(false); // Close on selection on mobile
+                    setSidebarOpen(false);
                 }}
                 isOpen={isSidebarOpen}
                 onClose={() => setSidebarOpen(false)}
                 onShowImport={() => {
-                    setShowImport(true);
-                    setSidebarOpen(false); // Close sidebar on mobile
+                    setIsImportModalOpen(true);
+                    setSidebarOpen(false);
+                }}
+                onShowExport={() => {
+                    setIsExportModalOpen(true);
+                    setSidebarOpen(false);
                 }}
             />
 
@@ -58,10 +64,15 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentView, setView }
                         <Menu size={24} />
                     </button>
                     <span className="font-bold text-lg text-gray-800 dark:text-white">Warp CR</span>
-                    <div className="w-8" /> {/* Spacer for centering if needed, or keep alignment */}
+                    <div className="flex items-center gap-2">
+                        <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                        </button>
+                        <UserMenu />
+                    </div>
                 </div>
 
-                {/* Desktop Controls (Absolute) - adjusted top for mobile to not overlap or be hidden */}
+                {/* Desktop Controls (Absolute) */}
                 <div className="absolute top-4 right-4 z-20 flex gap-2 items-center hidden md:flex">
                     <button
                         onClick={toggleLanguage}
@@ -81,30 +92,18 @@ export const Layout: React.FC<LayoutProps> = ({ children, currentView, setView }
                     <UserMenu />
                 </div>
 
-                {/* Mobile Controls (Inline in header or separate row? keeping them in header might be crowded. 
-                    Let's just show them in the top right of the mobile header for now, simplifying.) 
-                */}
-
-                {/* Re-implementing Mobile Header to include the existing controls if possible, or keeping them separate. 
-                     Let's make the absolute controls visible on mobile but positioned differently? 
-                     Actually the mobile header I just added covers the top. 
-                     Let's put the controls INSIDE the new mobile header for mobile view.
-                 */}
-
-                {/* Retrying the Mobile Header part to be cleaner and reuse controls */}
-                <div className="md:hidden absolute top-4 right-4 z-20 flex gap-2 items-center">
-                    {/* Simplified mobile controls */}
-                    <UserMenu />
-                </div>
-
-
                 {/* Scrollable Content */}
                 <div className="flex-1 overflow-auto p-4 md:p-6 pt-4 md:pt-16 relative">
                     {children}
                 </div>
             </main>
 
-            {showImport && <ImportModal onClose={() => setShowImport(false)} />}
+            {isImportModalOpen && (
+                <ImportModal onClose={() => setIsImportModalOpen(false)} />
+            )}
+            {isExportModalOpen && (
+                <ExportModal onClose={() => setIsExportModalOpen(false)} />
+            )}
         </div>
     );
 };

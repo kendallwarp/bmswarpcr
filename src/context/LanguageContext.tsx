@@ -32,6 +32,8 @@ const translations = {
         'export.brand_all': 'All Brands',
         'export.start_date': 'Start Date',
         'export.end_date': 'End Date',
+        'export.platform_all': 'All Platforms',
+        'export.select_range': 'Select date range and filters to export posts for bulk editing',
 
         // Filter
         'filter.search': 'Search copy or objective...',
@@ -108,6 +110,7 @@ const translations = {
         'import.errors': 'Validation Errors',
         'import.success_message': 'Successfully imported {count} posts!',
         'import.error_saving': 'Error saving import data. Please check connection and try again.',
+        'import.export_for_edit': 'Export for Bulk Edit',
 
         // PDF
         'pdf.generated': 'Generated',
@@ -150,6 +153,8 @@ const translations = {
         'export.brand_all': 'Todas las Marcas',
         'export.start_date': 'Fecha Inicio',
         'export.end_date': 'Fecha Fin',
+        'export.platform_all': 'Todas las Plataformas',
+        'export.select_range': 'Selecciona el rango de fechas y filtros para exportar y editar masivamente',
 
         // Filter
         'filter.search': 'Buscar copy u objetivo...',
@@ -226,6 +231,7 @@ const translations = {
         'import.errors': 'Errores de Validación',
         'import.success_message': '¡{count} publicaciones importadas con éxito!',
         'import.error_saving': 'Error al guardar. Verifica tu conexión e intenta de nuevo.',
+        'import.export_for_edit': 'Exportar para Edición Masiva',
 
         // PDF
         'pdf.generated': 'Generado',

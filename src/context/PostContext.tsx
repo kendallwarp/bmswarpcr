@@ -9,7 +9,7 @@ interface PostContextType {
     loading: boolean;
     error: string | null;
     addPost: (post: Omit<Post, 'id' | 'createdAt'>) => Promise<void>;
-    bulkAddPosts: (posts: Omit<Post, 'id' | 'createdAt'>[]) => Promise<void>;
+    bulkAddPosts: (posts: Partial<Post>[]) => Promise<void>;
     updatePost: (id: string | number, updates: Partial<Post>) => Promise<void>;
     deletePost: (id: string | number) => Promise<void>;
     bulkDeletePosts: (ids: (string | number)[]) => Promise<void>;
@@ -142,7 +142,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const bulkAddPosts = async (postsData: Omit<Post, 'id' | 'createdAt'>[]) => {
+    const bulkAddPosts = async (postsData: Partial<Post>[]) => {
         try {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error('No user authenticated');
@@ -150,7 +150,8 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             // Map all posts to snake_case
             const dbPosts = postsData.map(p => ({
-                brand_id: currentBrand.id, // Use currentBrand.id from context
+                id: p.id, // Include ID for upsert
+                brand_id: currentBrand.id,
                 created_by: user.id,
                 date: p.date,
                 time: p.time,
@@ -169,7 +170,7 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             const { data, error } = await supabase
                 .from('posts')
-                .insert(dbPosts)
+                .upsert(dbPosts, { onConflict: 'id' }) // Use upsert with conflict on ID
                 .select();
 
             if (error) throw error;
@@ -194,7 +195,18 @@ export const PostProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 ad_id: p.ad_id
             }));
 
-            setPosts(prev => [...prev, ...newPosts]);
+            setPosts(prev => {
+                const updatedPosts = [...prev];
+                newPosts.forEach(newP => {
+                    const idx = updatedPosts.findIndex(p => p.id === newP.id);
+                    if (idx > -1) {
+                        updatedPosts[idx] = newP;
+                    } else {
+                        updatedPosts.push(newP);
+                    }
+                });
+                return updatedPosts;
+            });
         } catch (err: any) {
             console.error('Error bulk adding posts:', err);
             throw err;

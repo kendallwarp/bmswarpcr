@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import type { Post } from '../types';
 import { PLATFORMS } from '../types';
-import { X, CheckCircle, DollarSign, Calendar as CalendarIcon, Copy, Edit2, Save, Trash2, Image as ImageIcon } from 'lucide-react';
+import { X, CheckCircle, DollarSign, Calendar as CalendarIcon, Copy, Edit2, Save, Trash2, Image as ImageIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePosts } from '../context/PostContext';
 import { getImageUrl } from '../utils/imageHelper';
 import { useLanguage } from '../context/LanguageContext';
@@ -15,8 +15,29 @@ interface ContentModalProps {
 
 export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => {
     const { t } = useLanguage();
-    const { updatePost, deletePost } = usePosts();
+    const { posts, updatePost, deletePost } = usePosts();
     const { brands } = useBrand(); // Available brands
+
+    // Sort posts chronologically for navigation
+    const sortedPosts = [...posts].sort((a, b) => {
+        const dateTimeA = `${a.date}T${a.time}`;
+        const dateTimeB = `${b.date}T${b.time}`;
+        return dateTimeA.localeCompare(dateTimeB);
+    });
+
+    const currentIndex = sortedPosts.findIndex(p => String(p.id) === String(formData.id));
+    const hasPrev = currentIndex > 0;
+    const hasNext = currentIndex !== -1 && currentIndex < sortedPosts.length - 1;
+
+    const navigateTo = (index: number) => {
+        if (index >= 0 && index < sortedPosts.length) {
+            const newPost = sortedPosts[index];
+            setFormData(newPost);
+            setPreview(newPost.image ? (getImageUrl(newPost.image) || null) : null);
+            setIsEditing(false);
+            // Update URL or state if needed, but for now local state is enough
+        }
+    };
 
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState<Partial<Post>>({
@@ -154,6 +175,28 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                                     'text-gray-500'
                             } `}>
                             {formData.status}
+                        </div>
+                    )}
+
+                    {/* Navigation Buttons (Floating) */}
+                    {!isEditing && sortedPosts.length > 1 && (
+                        <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none z-20">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex - 1); }}
+                                disabled={!hasPrev}
+                                className={`p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 pointer-events-auto transition-all ${!hasPrev ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
+                                aria-label="Previous Post"
+                            >
+                                <ChevronLeft className="w-8 h-8" />
+                            </button>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex + 1); }}
+                                disabled={!hasNext}
+                                className={`p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl border border-gray-100 dark:border-gray-700 pointer-events-auto transition-all ${!hasNext ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
+                                aria-label="Next Post"
+                            >
+                                <ChevronRight className="w-8 h-8" />
+                            </button>
                         </div>
                     )}
                 </div>

@@ -11,6 +11,7 @@ import { useBrand } from '../context/BrandContext';
 
 // Simple types for CSV row
 interface CSVRow {
+    id?: string;
     date: string;
     time: string;
     platform: string;
@@ -41,8 +42,8 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const downloadTemplate = () => {
-        const headers = ['date', 'time', 'platform', 'objective', 'status', 'isPaid', 'budget', 'copy', 'imageURL', 'imageDescription', 'campaign_name', 'ad_group_name', 'ad_id'];
-        const sampleRow = ['2024-01-01', '09:00', 'Instagram', 'Brand Awareness', 'Draft', 'FALSE', '0', 'Sample copy here', 'https://example.com/image.jpg', 'Modern design with blue tones', '', '', ''];
+        const headers = ['id', 'date', 'time', 'platform', 'objective', 'status', 'isPaid', 'budget', 'copy', 'imageURL', 'imageDescription', 'campaign_name', 'ad_group_name', 'ad_id'];
+        const sampleRow = ['', '2024-01-01', '09:00', 'Instagram', 'Brand Awareness', 'Draft', 'FALSE', '0', 'Sample copy here', 'https://example.com/image.jpg', 'Modern design with blue tones', '', '', ''];
 
         // Create CSV content
         const csvContent = [headers.join(','), sampleRow.join(',')].join('\n');
@@ -131,6 +132,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ onClose }) => {
                     };
 
                     parsedPosts.push({
+                        id: row.id || undefined,
                         date: normalizedDate,
                         time: row.time || '09:00',
                         platform: normalizePlatform(platformValue),
