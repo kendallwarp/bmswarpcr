@@ -126,7 +126,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                     <button
                         onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex - 1); }}
                         disabled={!hasPrev}
-                        className={`fixed left-4 top-1/2 -translate-y-1/2 z-[60] p-4 rounded-full bg-white dark:bg-gray-800 shadow-2xl border border-gray-200 dark:border-gray-700 transition-all ${!hasPrev ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
+                        className={`absolute left-[calc((100%-56rem)/2-4rem)] top-1/2 -translate-y-1/2 z-[60] p-4 rounded-full bg-white dark:bg-gray-800 shadow-2xl border border-gray-200 dark:border-gray-700 transition-all ${!hasPrev ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
                         aria-label="Previous Post"
                     >
                         <ChevronLeft className="w-8 h-8" />
@@ -134,7 +134,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ post, onClose }) => 
                     <button
                         onClick={(e) => { e.stopPropagation(); navigateTo(currentIndex + 1); }}
                         disabled={!hasNext}
-                        className={`fixed right-4 top-1/2 -translate-y-1/2 z-[60] p-4 rounded-full bg-white dark:bg-gray-800 shadow-2xl border border-gray-200 dark:border-gray-700 transition-all ${!hasNext ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
+                        className={`absolute right-[calc((100%-56rem)/2-4rem)] top-1/2 -translate-y-1/2 z-[60] p-4 rounded-full bg-white dark:bg-gray-800 shadow-2xl border border-gray-200 dark:border-gray-700 transition-all ${!hasNext ? 'opacity-0 scale-75 pointer-events-none' : 'hover:scale-110 active:scale-95 text-blue-600 dark:text-blue-400 opacity-90 hover:opacity-100'}`}
                         aria-label="Next Post"
                     >
                         <ChevronRight className="w-8 h-8" />
